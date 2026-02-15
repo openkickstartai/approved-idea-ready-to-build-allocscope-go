@@ -11,12 +11,14 @@ import (
 
 // Finding represents a single detected heap allocation issue.
 type Finding struct {
-	File     string `json:"file"`
-	Line     int    `json:"line"`
-	Rule     string `json:"rule"`
-	Severity string `json:"severity"`
-	Message  string `json:"message"`
+	File       string `json:"file"`
+	Line       int    `json:"line"`
+	Rule       string `json:"rule"`
+	Severity   string `json:"severity"`
+	Confidence string `json:"confidence"`
+	Message    string `json:"message"`
 }
+
 
 func main() {
 	jsonOut := flag.Bool("json", false, "output as JSON")
@@ -62,7 +64,8 @@ func main() {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		enc.Encode(findings)
-	} else {
+			fmt.Printf("%s:%d [%s|%s] %s (%s)\n", f.File, f.Line, f.Severity, f.Confidence, f.Message, f.Rule)
+
 		for _, f := range findings {
 			fmt.Printf("%s:%d [%s] %s (%s)\n", f.File, f.Line, f.Severity, f.Message, f.Rule)
 		}
